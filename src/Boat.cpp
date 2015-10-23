@@ -13,7 +13,7 @@ Boat::Boat() {
 }
 
 Boat::~Boat() {
-	// TODO Auto-generated destructor stub
+	cout << "You are destroying a boat. " << endl;
 }
 
 double Boat::getLength(){
