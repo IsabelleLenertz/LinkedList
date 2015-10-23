@@ -11,8 +11,8 @@
 
 using namespace std;
 struct ListNode{
-	Boat data
-	struct ListNode next;
+	Boat data;
+	struct ListNode *next;
 };// ListNode
 
 int main() {
