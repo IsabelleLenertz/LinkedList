@@ -59,5 +59,5 @@ string Boat::whatAmI(){
 
 	theWeight = converter.str();
 
-	return "I am a " + this->getModel()+ ", " + theWeight + " meters long";
+	return "I am a " + theWeight + " kg " + this->getModel();
 }

@@ -20,7 +20,7 @@ struct ListNode{
 
 //
 // Function Prototype
-void appendNode(ListNode *, Boat*);
+void appendNode(ListNode *&, Boat*);
 void destroyList(ListNode *aNode);
 
 //Main Function
@@ -33,7 +33,8 @@ int main() {
 		Boat *theBoat = new Boat();
 		// Set the weight and model
 		theBoat->setWeight( (i+1)*100 );
-		theBoat->setModel("A Boat");
+		theBoat->setModel("boat");
+		cout << theBoat->whatAmI() << endl;
 		// add them to the end of the list
 		appendNode(head, theBoat);
 	}
@@ -44,31 +45,45 @@ int main() {
 	return 0;
 }
 
-void appendNode(ListNode*aNode, Boat* theBoat){
+void appendNode(ListNode*&aNode, Boat* theBoat){
 
 	ListNode *nodePtr;
 
 	// Check if there is something in the first node.
 	if (aNode == nullptr){
+		// Dinalically alcate a new node to the head
+		aNode = new ListNode;
+		// set its
 		aNode->data = theBoat;
+		aNode->next = nullptr;
 	}// if
 	// this is not the first in the list, so we need to find the last
 	else {
 		// while node ptr has something in is (it it true if it has smth other than null or zero)
+		nodePtr = aNode;
 		while(nodePtr->next){
 			nodePtr = nodePtr->next;
 		}//while
-		nodePtr->next = aNode;
-		aNode->next = nullptr;
+		// Create a new node after the last of the list
+		nodePtr->next = new ListNode;
+		// Assigns the boat to that node
+		nodePtr->next->data = theBoat;
+		// Set the last pointer to nullptr
+		nodePtr->next->next = nullptr;
 	}// else
 }// appendNode
 
 void destroyList(ListNode *aNode){
 	ListNode *nodePtr, *tempPtr;
 
+	// Sets a temporary pointer, just because the teacher wants it. But he admitted it is useless and I am right!
 	nodePtr = aNode;
-	while (nodePtr){
+
+	while (nodePtr != nullptr){
+		// remembers address of the next node
 		tempPtr = nodePtr->next;
+
+		// Destroys the current node
 		delete nodePtr->data;
 		delete nodePtr;
 		nodePtr = tempPtr;
@@ -76,3 +91,8 @@ void destroyList(ListNode *aNode){
 
 	aNode = nodePtr;
 }
+
+
+
+
+
