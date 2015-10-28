@@ -24,14 +24,24 @@ struct ListNode {
 void appendNode(ListNode *&, Boat*);
 void destroyList(ListNode *aNode);
 void traverseList(ListNode *aNode);
+// Returns true if the node was inserted properly
+// Returns false if the position did not exists.
+bool insertNode(ListNode *&, Boat*, int);
+// Returns the size of the list.
+int getSize(ListNode *aNode);
+// Returns the position of a node
+int findNode(ListNode *aNode, double searchWeight);
+
 
 //Main Function
 int main() {
 	ListNode *head = nullptr;
 	string userInput = "";
+	const int NUMBOAT = 5;
+	int listPosition = 0;
 
 	cout << "Creating 100 boats" << endl;
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < NUMBOAT; i++) {
 		// Creates a new boat
 		Boat *theBoat = new Boat();
 		// Sets the weight and model
@@ -45,6 +55,27 @@ int main() {
 	cout << "Getting ready to traverse List" << endl;
 	getline(cin, userInput);
 	traverseList(head);
+	cout << "There are " << getSize(head) << " nodes in the list." << endl;
+
+	cout << "Please enter a position in the list 1-100 to insert the boat after" << endl;
+	cin >> listPosition;
+	// Creates a new boat
+	Boat *theBoat = new Boat();
+	// Sets the weight and model
+	theBoat->setWeight(998);
+	theBoat->setModel("an inserted boat");
+	insertNode(head, theBoat, listPosition);
+
+	// Find a position.
+	cout << "Ready to find a boat that weighs 998" << endl;
+	getline(cin, userInput);
+	cout << "Boat found at position " << findNode(head, 998) << endl;
+
+	// Traverse the entire list
+	cout << "Getting ready to traverse List after insert" << endl;
+	getline(cin, userInput);
+	traverseList(head);
+
 
 	// Deletes the entire linked list
 	cout << "Getting ready to destroy List" << endl;
@@ -119,4 +150,95 @@ void traverseList(ListNode *aNode) {
 	}		// while
 
 }
+
+bool insertNode(ListNode*&aNode, Boat* theBoat, int position){
+
+	// temporary pointer to a node
+	ListNode *nodePtr;
+	ListNode *tempNode;
+
+	// Check if the list is empty
+	if (aNode == nullptr){
+		return false;
+	}
+	else{
+		nodePtr = aNode;
+	}
+
+	// Goes through the list and make sure the position the user wants to insert a node to exists.
+	// Return false if the position does not exist.
+	if (position !=0){
+		for (int i=0; i < (position-1); i++ ) {
+			// check if we do not reach the list
+			if (nodePtr->next == nullptr){
+				return false;
+			}
+			else{
+				nodePtr = nodePtr->next;
+			}
+		} // end of for	}
+		ListNode *newNode = new ListNode;
+		tempNode = nodePtr->next;
+		nodePtr->next = newNode;
+		newNode->data = theBoat;
+		newNode->next = tempNode;
+	} // end of if
+	else{
+		ListNode *newNode = new ListNode;
+		tempNode = nodePtr;
+		newNode->data = theBoat;
+		newNode->next = tempNode;
+		aNode = newNode;
+	}
+	return true;
+
+
+
+}// end of insertNode
+
+int getSize(ListNode *aNode) {
+	ListNode *nodePtr;
+	int size = 0;
+
+	nodePtr=aNode;
+	while (nodePtr != nullptr) {
+		// remembers address of the next node
+		nodePtr = nodePtr->next;
+		size++;
+
+	}		// while
+
+	return size;
+}
+
+// Returns the position of a node
+// Returns 0 if the node was not found
+int findNode(ListNode *aNode, double searchWeight){
+	ListNode *nodePtr;
+	int position = 0;
+
+	nodePtr = aNode;
+	while (nodePtr) {
+		// remembers address of the next node
+		if ( searchWeight == nodePtr->data->getWeight() ){
+			// exists the while loop if the weight is found
+			break;
+		}
+		else{
+			// keeps track of the position
+			position++;
+			nodePtr = nodePtr->next;
+		}// end of else
+	}// while
+
+	if (nodePtr == nullptr)	{
+		return 0;
+	}
+	else {
+		return (position+1);
+	}
+
+} // end of findNode
+
+
 
