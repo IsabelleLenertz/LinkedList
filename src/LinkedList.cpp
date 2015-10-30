@@ -31,6 +31,8 @@ bool insertNode(ListNode *&, Boat*, int);
 int getSize(ListNode *aNode);
 // Returns the position of a node
 int findNode(ListNode *aNode, double searchWeight);
+// Reverse the list
+void  reverseList(ListNode * &headPtr);
 
 
 //Main Function
@@ -76,6 +78,15 @@ int main() {
 	getline(cin, userInput);
 	traverseList(head);
 
+	// Reverses the list
+	cout << "Getting ready to reverse the list." << endl;
+	getline(cin, userInput);
+	reverseList(head);
+
+	// Traverse the entire list
+	cout << "Getting ready to traverse List after insert" << endl;
+	getline(cin, userInput);
+	traverseList(head);
 
 	// Deletes the entire linked list
 	cout << "Getting ready to destroy List" << endl;
@@ -240,5 +251,19 @@ int findNode(ListNode *aNode, double searchWeight){
 
 } // end of findNode
 
+void reverseList(ListNode * &headPtr) {
+	ListNode *nodePtr;
+	ListNode *tempHeadPtr, *temp;
+
+	tempHeadPtr = headPtr ;
+	nodePtr = headPtr->next;
+	while (nodePtr != nullptr) {
+		temp = nodePtr->next;
+		nodePtr->next = headPtr;
+		headPtr = nodePtr;
+		nodePtr = temp;
+	}		// while
+	tempHeadPtr->next = nullptr;
+}
 
 
