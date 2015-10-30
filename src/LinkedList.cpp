@@ -33,6 +33,11 @@ int getSize(ListNode *aNode);
 int findNode(ListNode *aNode, double searchWeight);
 // Reverse the list
 void  reverseList(ListNode * &headPtr);
+// Deletes a node at a specific position (position >1)
+// returns true to signify success
+// returns false to signify the node was not find.
+bool deleteNode(ListNode *&aNode, int position);
+
 
 
 //Main Function
@@ -73,10 +78,16 @@ int main() {
 	getline(cin, userInput);
 	cout << "Boat found at position " << findNode(head, 998) << endl;
 
+	// Deletes a node
+	cout << "position to destroy: " << endl;
+	cin >> listPosition;
+	deleteNode(head, listPosition);
+
 	// Traverse the entire list
 	cout << "Getting ready to traverse List after insert" << endl;
 	getline(cin, userInput);
 	traverseList(head);
+
 
 	// Reverses the list
 	cout << "Getting ready to reverse the list." << endl;
@@ -87,6 +98,7 @@ int main() {
 	cout << "Getting ready to traverse List after insert" << endl;
 	getline(cin, userInput);
 	traverseList(head);
+
 
 	// Deletes the entire linked list
 	cout << "Getting ready to destroy List" << endl;
@@ -264,6 +276,75 @@ void reverseList(ListNode * &headPtr) {
 		nodePtr = temp;
 	}		// while
 	tempHeadPtr->next = nullptr;
-}
+} // end of reverseList
 
+
+// Deletes a node at a specific position (position >1)
+// returns true to signify success
+// returns false to signify the node was not find.
+bool deleteNode(ListNode *&aNode, int position){
+
+	// temporary pointer to a node
+	ListNode *nodePtr;
+	ListNode *prevNode;
+
+	// Initializes the previous node we want to keep track of.
+	prevNode = aNode;
+	// Check if the list is empty
+	if (aNode == nullptr){
+		return false;
+	}
+	else{
+		nodePtr = aNode;
+	}
+
+	// Goes through the list and make sure the position the user wants to delete a node that exists.
+	// Return false if the position does not exist.
+	if (position !=0){
+		for (int i=0; i < (position-1); i++ ) {
+			// check if we do not reach the end list
+			if (nodePtr->next == nullptr){
+				// returns false if reached the end of the list without finding the position
+				return false;
+			}
+			else{
+				// moves to the next node
+				prevNode = nodePtr;
+				nodePtr = nodePtr->next;
+			}
+		} // end of for
+		// if the user wants to delete the first node
+		if (position == 1) {
+				// if the user wants to delete the first node and it is the only node.
+				if (nodePtr->next == nullptr){
+					aNode = nullptr;
+				}// end of if
+				// if the user wants to delete the first node and it is not the only node.
+				else{
+					aNode = nodePtr->next;
+				}// end of else
+
+		}// end of if
+		//If the user wants to delete any other than the first one.
+		else{
+			// moves to the next node
+			prevNode->next = nodePtr->next;
+		}// end of else
+
+		// deletes the node and reconnects the two portion of the list.
+		prevNode->next = nodePtr->next;
+		// deletes the dynamically allocated memory
+		delete nodePtr->data;
+		delete nodePtr;
+
+	} // end of if
+	else{
+		// return false if the user wants to delete position 0 (does not exist, we start at 1)
+		return false;
+	}
+
+	// signifies the node was properly deleted.
+	return true;
+
+}
 
