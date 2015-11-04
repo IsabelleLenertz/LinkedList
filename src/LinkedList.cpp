@@ -81,6 +81,7 @@ int main() {
 	// Deletes a node
 	cout << "position to destroy: " << endl;
 	cin >> listPosition;
+	getline(cin, userInput);
 	deleteNode(head, listPosition);
 
 	// Traverse the entire list
