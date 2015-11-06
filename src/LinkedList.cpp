@@ -16,13 +16,15 @@ using namespace std;
 struct ListNode {
 	Boat *data;
 	struct ListNode *next;
-};
-// ListNode
+}; // ListNode
+
+// max size of the stack;
+long maxSize = 8;
 
 //
 // Function Prototype
 void appendNode(ListNode *&, Boat*);
-void destroyList(ListNode *aNode);
+void destroyList(ListNode *&aNode);
 void traverseList(ListNode *aNode);
 // Returns true if the node was inserted properly
 // Returns false if the position did not exists.
@@ -38,6 +40,10 @@ void  reverseList(ListNode * &headPtr);
 // returns false to signify the node was not find.
 bool deleteNode(ListNode *&aNode, int position);
 
+// push a new node in the stack.
+bool push(ListNode *& aNode, Boat*);
+Boat pop(ListNode *& headPtr);
+
 
 
 //Main Function
@@ -46,6 +52,7 @@ int main() {
 	string userInput = "";
 	const int NUMBOAT = 5;
 	int listPosition = 0;
+	Boat *aBoat = nullptr;
 
 	cout << "Creating 100 boats" << endl;
 	for (int i = 0; i < NUMBOAT; i++) {
@@ -64,6 +71,23 @@ int main() {
 	traverseList(head);
 	cout << "There are " << getSize(head) << " nodes in the list." << endl;
 
+	// Pushes a new boat on the like like a stack.
+	cout << "Getting to push onto the list like a stack" << endl;
+	getline(cin, userInput);
+	aBoat = new Boat;
+	aBoat->setWeight(55);
+	aBoat->setModel("an Stack Boat");
+	push(head, aBoat);
+	traverseList(head);
+
+	// Pop off of the list like a stack
+	cout << "Getting ready to pop off the list like a stack" << endl;
+	getline(cin, userInput);
+	Boat someBoat = pop(head);
+	cout << "The Boat we popped weight " << someBoat.getWeight() << endl;
+
+	/**
+	// Adds a boat at a specific position
 	cout << "Please enter a position in the list 1-100 to insert the boat after" << endl;
 	cin >> listPosition;
 	// Creates a new boat
@@ -93,6 +117,8 @@ int main() {
 	cout << "Getting ready to reverse the list." << endl;
 	getline(cin, userInput);
 	reverseList(head);
+
+	**/
 
 	// Traverse the entire list
 	cout << "Getting ready to traverse List after insert" << endl;
@@ -136,7 +162,7 @@ void appendNode(ListNode*&aNode, Boat* theBoat) {
 	}		// else
 }		// appendNode
 
-void destroyList(ListNode *aNode) {
+void destroyList(ListNode *&aNode) {
 	ListNode *nodePtr, *tempPtr;
 
 	// Sets a temporary pointer, just because the teacher wants it. But he admitted it is useless and I am right!
@@ -348,3 +374,44 @@ bool deleteNode(ListNode *&aNode, int position){
 
 }
 
+// push onto the stack (head) a new boat
+bool push(ListNode *& headPtr, Boat* aBoat){
+	// stors the return value
+	bool returnValue = true;
+
+	// if the max size of the stack has already been reached
+	if (getSize(headPtr) >= maxSize){
+		returnValue =  false;
+	} // end of if
+	else{
+		// Pushes the new boat
+		ListNode * nodePtr = new ListNode();
+		nodePtr->data = aBoat;
+		nodePtr->next = headPtr;
+		headPtr = nodePtr;
+	} // end of else
+
+	return returnValue;
+
+}// end of push
+
+Boat pop(ListNode *& headPtr){
+	ListNode*nodePtr;
+	Boat aBoat; // temporary boat to store the return value.
+
+	if (headPtr == nullptr){
+		throw "Pop Failed";
+	} // end of if
+	else{
+		nodePtr = headPtr;
+		// connects the head to the second node
+		headPtr = nodePtr->next;
+		// goes to the first boat of the list and stores it into the temporary boat.
+		aBoat = *(nodePtr->data);
+		// deletes the node
+		delete nodePtr->data;
+		delete nodePtr;
+	}// end of else
+
+	return aBoat;
+}// end of pop
